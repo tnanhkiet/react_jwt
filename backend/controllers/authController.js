@@ -20,9 +20,9 @@ const authController = {
 
       // Save to database
       const user = await newUser.save();
-      res.status(200).json(user);
+      return res.status(200).json(user);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 
@@ -77,10 +77,10 @@ const authController = {
           sameSite: "strict",
         });
         const { password, ...others } = user._doc;
-        res.status(200).json({ ...others, accessToken });
+        return res.status(200).json({ ...others, accessToken });
       }
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 
@@ -89,7 +89,7 @@ const authController = {
     // Take refresh token from user
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-      res.status(401).json("You're not authenticated");
+      return res.status(401).json("You're not authenticated");
     }
     if (!refreshTokens.includes(refreshToken)) {
       return res.status(403).json("Refresh token is not valid");
@@ -109,7 +109,7 @@ const authController = {
         path: "/",
         sameSite: "strict",
       });
-      res.status(200).json({ accessToken: newAccessToken });
+      return res.status(200).json({ accessToken: newAccessToken });
     });
   },
 
@@ -119,7 +119,7 @@ const authController = {
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.cookies.refreshToken
     );
-    res.status(200).json("Logged out success");
+    return res.status(200).json("Logged out success");
   },
 };
 
